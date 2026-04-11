@@ -90,7 +90,7 @@ const PIPELINE_STEPS = [
   "Prompt intake and corpus scan",
   "Dual-model execution",
   "TEVVRL scoring",
-  "Validation threshold gate",
+  "Head-to-head model ranking",
   "Trend storage and alerts",
   "Dashboard and CI/CD release decision",
 ];
@@ -174,7 +174,7 @@ function buildTrend(model, genre, currentValidation) {
   return { averageSeries, currentSeries, averageValidation };
 }
 
-function buildResponse(model, genre, prompt, validation, threshold) {
+function buildResponse(model, genre, prompt, validation) {
   const focusByGenre = {
     Business: "cost, policy, and measurable rollout steps",
     Science: "evidence, uncertainty, and experimental rigor",
@@ -190,11 +190,7 @@ function buildResponse(model, genre, prompt, validation, threshold) {
         ? "analytical and detail-heavy"
         : "balanced and production-ready";
 
-  return `This ${model.name} response is ${posture}, emphasizing ${focusByGenre[genre]}. For the prompt "${prompt.trim()}", the engine projects a validation score of ${validation}/10 against a deployment threshold of ${threshold}/10.`;
-}
-
-function getStatus(validation, threshold) {
-  return validation >= threshold ? "PASS" : "FAIL";
+  return `This ${model.name} response is ${posture}, emphasizing ${focusByGenre[genre]}. For the prompt "${prompt.trim()}", the engine projects a composite comparison score of ${validation}/10 in this head-to-head run.`;
 }
 
 function toPoints(series) {
@@ -216,7 +212,7 @@ function ScorePill({ label, value }) {
   );
 }
 
-function TrendChart({ model, trend, threshold }) {
+function TrendChart({ model, trend }) {
   return (
     <div className="chart-card rounded-[30px] border border-[color:var(--line)] bg-[color:var(--panel)] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.32)]">
       <div className="chart-header flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -231,7 +227,6 @@ function TrendChart({ model, trend, threshold }) {
       </div>
       <div className="chart-shell mt-4">
         <svg viewBox="0 0 100 100" className="chart-svg" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="0" y1={100 - threshold * 10} x2="100" y2={100 - threshold * 10} className="threshold-line" />
           <polyline points={toPoints(trend.averageSeries)} className="average-line" />
           <polyline points={toPoints(trend.currentSeries)} className="current-line" style={{ "--line-color": model.color }} />
         </svg>
@@ -251,17 +246,15 @@ function TrendChart({ model, trend, threshold }) {
           <strong>{trend.currentSeries.at(-1)}</strong>
         </div>
         <div>
-          <span>Threshold</span>
-          <strong>{threshold.toFixed(1)}</strong>
+          <span>Delta</span>
+          <strong>{round(trend.currentSeries.at(-1) - trend.averageValidation)}</strong>
         </div>
       </div>
     </div>
   );
 }
 
-function ModelCard({ model, score, threshold, response }) {
-  const status = getStatus(score.validation, threshold);
-
+function ModelCard({ model, score, winner, response }) {
   return (
     <article className="model-card rounded-3xl border border-[color:var(--line)] bg-[color:var(--panel-strong)] p-5">
       <div className="model-topline flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -269,7 +262,7 @@ function ModelCard({ model, score, threshold, response }) {
           <p className="micro-label">{model.lane}</p>
           <h3>{model.name}</h3>
         </div>
-        <span className={`status-pill ${status === "PASS" ? "pass" : "fail"}`}>{status}</span>
+        <span className={`status-pill ${winner ? "pass" : "fail"}`}>{winner ? "Leads" : "Trails"}</span>
       </div>
       <p className="supporting-text">{model.tagline}</p>
       <div className="score-grid mt-4 grid grid-cols-2 gap-3 xl:grid-cols-3">
@@ -295,7 +288,6 @@ function ModelCard({ model, score, threshold, response }) {
 
 export default function App() {
   const [genre, setGenre] = useState("Business");
-  const [threshold, setThreshold] = useState(8.1);
   const [primaryModelId, setPrimaryModelId] = useState("gpt5");
   const [secondaryModelId, setSecondaryModelId] = useState("deepseek");
   const [prompt, setPrompt] = useState(DOMAIN_PROMPTS.Business);
@@ -311,6 +303,8 @@ export default function App() {
 
   const comparisonGap = round(primaryScore.validation - secondaryScore.validation);
   const betterModel = comparisonGap >= 0 ? primaryModel.name : secondaryModel.name;
+  const primaryWinner = comparisonGap >= 0;
+  const secondaryWinner = comparisonGap < 0;
 
   return (
     <main className="app-shell relative min-h-screen overflow-hidden bg-[#090511] px-5 py-5 md:px-8">
@@ -321,10 +315,10 @@ export default function App() {
       <section className="hero relative z-10 mx-auto mb-6 grid w-full max-w-[1280px] gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.95fr)]">
         <div className="hero-copy rounded-[30px] border border-[color:var(--line)] bg-[color:var(--panel)] p-10 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur">
           <p className="eyebrow">USDA AI Evals Engine</p>
-          <h1>CI/CD for deciding which AI models are worth trusting.</h1>
+          <h1>AIMetrics: Which AI Model Would You Trust?</h1>
           <p className="hero-text">
             A scalable TEVVRL evaluation control center that tests LLMs, compares them side-by-side,
-            monitors drift over time, and fails deployment when validation drops below the user-defined bar.
+            monitors drift over time, and clearly shows which model performs better for the prompt you are testing.
           </p>
           <div className="hero-badges mt-6 flex flex-wrap gap-2.5">
             <span>TEVV pipelines</span>
@@ -354,8 +348,8 @@ export default function App() {
               <h2>Run a live comparison</h2>
             </div>
             <div className="summary-chip rounded-3xl border border-[color:var(--line)] bg-[color:var(--panel-strong)] px-4 py-3 text-left md:min-w-[140px] md:text-right">
-              <span>Validation threshold</span>
-              <strong>{threshold.toFixed(1)}/10</strong>
+              <span>Current winner</span>
+              <strong>{betterModel}</strong>
             </div>
           </div>
 
@@ -410,21 +404,6 @@ export default function App() {
             </label>
           </div>
 
-          <label className="slider-field mt-5 grid gap-2.5">
-            <div className="slider-copy flex items-center justify-between">
-              <span>Required validation score</span>
-              <strong>{threshold.toFixed(1)}</strong>
-            </div>
-            <input
-              type="range"
-              min="6"
-              max="9.8"
-              step="0.1"
-              value={threshold}
-              onChange={(event) => setThreshold(Number(event.target.value))}
-            />
-          </label>
-
           <label className="prompt-field mt-5 grid gap-2.5">
             <span>Prompt under test</span>
             <textarea
@@ -443,9 +422,7 @@ export default function App() {
             </div>
             <div className="banner-metrics flex flex-wrap gap-2.5 md:justify-end">
               <span>Gap {Math.abs(comparisonGap)}</span>
-              <span>
-                {getStatus(primaryScore.validation, threshold)} / {getStatus(secondaryScore.validation, threshold)}
-              </span>
+              <span>Best composite score wins</span>
             </div>
           </div>
 
@@ -453,14 +430,14 @@ export default function App() {
             <ModelCard
               model={primaryModel}
               score={primaryScore}
-              threshold={threshold}
-              response={buildResponse(primaryModel, genre, deferredPrompt, primaryScore.validation, threshold.toFixed(1))}
+              winner={primaryWinner}
+              response={buildResponse(primaryModel, genre, deferredPrompt, primaryScore.validation)}
             />
             <ModelCard
               model={secondaryModel}
               score={secondaryScore}
-              threshold={threshold}
-              response={buildResponse(secondaryModel, genre, deferredPrompt, secondaryScore.validation, threshold.toFixed(1))}
+              winner={secondaryWinner}
+              response={buildResponse(secondaryModel, genre, deferredPrompt, secondaryScore.validation)}
             />
           </div>
         </div>
@@ -471,7 +448,7 @@ export default function App() {
             <h2>Validation is the average</h2>
             <p className="supporting-text">
               Validation is computed as the average of Test, Evaluation, Verification, Reliability, and Leniency.
-              If that average falls below the user threshold, the model is marked as failed.
+              The engine compares those composite scores directly and surfaces the stronger model for the current prompt.
             </p>
             <div className="formula-card mt-[18px] rounded-3xl border border-[color:var(--line)] bg-[color:var(--panel-strong)] p-[18px]">
               <span>Validation</span>
@@ -500,8 +477,8 @@ export default function App() {
       </section>
 
       <section className="chart-grid relative z-10 mx-auto mt-6 grid w-full max-w-[1280px] gap-[18px] 2xl:grid-cols-2">
-        <TrendChart model={primaryModel} trend={primaryTrend} threshold={threshold} />
-        <TrendChart model={secondaryModel} trend={secondaryTrend} threshold={threshold} />
+        <TrendChart model={primaryModel} trend={primaryTrend} />
+        <TrendChart model={secondaryModel} trend={secondaryTrend} />
       </section>
     </main>
   );

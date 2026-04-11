@@ -17,6 +17,8 @@
   --violet: #8b5cf6;
   --orchid: #d946ef;
   --indigo: #6366f1;
+  --crimson: #ef4444;
+  --rose: #fb7185;
   --danger: #fb7185;
   --success: #34d399;
   color-scheme: dark;
@@ -37,6 +39,7 @@ body {
   font-family: "Outfit", sans-serif;
   color: var(--text);
   background:
+    radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.08), transparent 18%),
     radial-gradient(circle at 12% 10%, rgba(168, 85, 247, 0.3), transparent 24%),
     radial-gradient(circle at 88% 12%, rgba(217, 70, 239, 0.2), transparent 22%),
     radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.14), transparent 30%),
@@ -90,7 +93,7 @@ textarea {
   left: -60px;
   width: 260px;
   height: 260px;
-  background: rgba(217, 70, 239, 0.18);
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.2), rgba(217, 70, 239, 0.14));
 }
 
 .backdrop-grid {
@@ -126,7 +129,7 @@ textarea {
 .chart-card {
   border: 1px solid var(--line);
   background:
-    linear-gradient(180deg, rgba(38, 22, 63, 0.74), rgba(17, 10, 31, 0.9)),
+    linear-gradient(180deg, rgba(51, 24, 58, 0.74), rgba(17, 10, 31, 0.9)),
     var(--panel);
   border-radius: 30px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
@@ -143,7 +146,7 @@ textarea {
   font-size: 0.78rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #ddb8ff;
+  color: #ffb0c2;
 }
 
 .hero-copy h1,
@@ -191,7 +194,7 @@ textarea {
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(251, 113, 133, 0.08), rgba(255, 255, 255, 0.03));
 }
 
 .hero-panel,
@@ -214,8 +217,15 @@ textarea {
 .comparison-banner {
   border: 1px solid var(--line);
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(49, 28, 79, 0.72), rgba(24, 14, 40, 0.9));
+  background: linear-gradient(180deg, rgba(57, 25, 67, 0.76), rgba(24, 14, 40, 0.9));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.comparison-banner {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(251, 113, 133, 0.08),
+    0 24px 48px rgba(239, 68, 68, 0.08);
 }
 
 .standout-card {
@@ -494,18 +504,11 @@ textarea {
   overflow: visible;
 }
 
-.threshold-line,
 .average-line,
 .current-line {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.threshold-line {
-  stroke: rgba(251, 113, 133, 0.7);
-  stroke-width: 1.4;
-  stroke-dasharray: 3 2;
 }
 
 .average-line {
