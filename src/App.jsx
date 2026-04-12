@@ -148,7 +148,6 @@ export default function App() {
   const [prompt, setPrompt] = useState(DOMAIN_PROMPTS.Business);
   const [comparison, setComparison] = useState(initialComparison);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [dataMode, setDataMode] = useState("local");
 
   const deferredPrompt = useDeferredValue(prompt);
@@ -159,7 +158,6 @@ export default function App() {
 
     async function fetchComparison() {
       setIsLoading(true);
-      setError("");
 
       try {
         const response = await fetch(`${apiBaseUrl}/api/compare`, {
@@ -197,7 +195,6 @@ export default function App() {
           })
         );
         setDataMode("local");
-        setError("Backend unavailable. Showing local static comparison mode so the site still works.");
       } finally {
         if (!controller.signal.aborted) {
           setIsLoading(false);
@@ -348,12 +345,6 @@ export default function App() {
               <span>Best composite score wins</span>
             </div>
           </div>
-
-          {error ? (
-            <div className="mt-4 rounded-3xl border border-[color:var(--line)] bg-white/5 px-5 py-4 text-sm text-[color:var(--rose)]">
-              {error}
-            </div>
-          ) : null}
 
           <div className="model-grid mt-5 grid gap-[18px] 2xl:grid-cols-2">
             <ModelCard
