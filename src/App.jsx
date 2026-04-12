@@ -7,6 +7,7 @@ import {
   TIME_LABELS,
   round,
 } from "./lib/evalsEngine";
+import HeroScene from "./components/HeroScene";
 
 const STANDOUT_FACTORS = [
   {
@@ -135,20 +136,20 @@ function ModelCard({ model, score, winner, response }) {
 }
 
 export default function App() {
+  const initialComparison = compareModels({
+    genre: "Business",
+    prompt: DOMAIN_PROMPTS.Business,
+    modelAId: "gpt5",
+    modelBId: "deepseek",
+  });
   const [genre, setGenre] = useState("Business");
   const [primaryModelId, setPrimaryModelId] = useState("gpt5");
   const [secondaryModelId, setSecondaryModelId] = useState("deepseek");
   const [prompt, setPrompt] = useState(DOMAIN_PROMPTS.Business);
-  const [comparison, setComparison] = useState(() =>
-    compareModels({
-      genre: "Business",
-      prompt: DOMAIN_PROMPTS.Business,
-      modelAId: "gpt5",
-      modelBId: "deepseek",
-    })
-  );
+  const [comparison, setComparison] = useState(initialComparison);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [dataMode, setDataMode] = useState("local");
 
   const deferredPrompt = useDeferredValue(prompt);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
@@ -181,12 +182,22 @@ export default function App() {
 
         const payload = await response.json();
         setComparison(payload);
+        setDataMode("api");
       } catch (fetchError) {
         if (fetchError.name === "AbortError") {
           return;
         }
 
-        setError(fetchError.message || "The comparison service is unavailable.");
+        setComparison(
+          compareModels({
+            genre,
+            prompt: deferredPrompt,
+            modelAId: primaryModelId,
+            modelBId: secondaryModelId,
+          })
+        );
+        setDataMode("local");
+        setError("Backend unavailable. Showing local static comparison mode so the site still works.");
       } finally {
         if (!controller.signal.aborted) {
           setIsLoading(false);
@@ -233,6 +244,14 @@ export default function App() {
 
         <div className="hero-panel rounded-[30px] border border-[color:var(--line)] bg-[color:var(--panel)] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur">
           <p className="micro-label">What Makes It Stand Out</p>
+          <HeroScene
+            primaryModel={primaryModel}
+            secondaryModel={secondaryModel}
+            primaryScore={primaryScore}
+            secondaryScore={secondaryScore}
+            winnerName={betterModel}
+            gap={comparisonGap}
+          />
           <div className="standout-grid grid gap-3.5">
             {STANDOUT_FACTORS.map((item) => (
               <article key={item.title} className="standout-card rounded-3xl border border-[color:var(--line)] bg-[color:var(--panel-strong)] p-[18px]">
@@ -252,7 +271,7 @@ export default function App() {
               <h2>Run a live comparison</h2>
             </div>
             <div className="summary-chip rounded-3xl border border-[color:var(--line)] bg-[color:var(--panel-strong)] px-4 py-3 text-left md:min-w-[140px] md:text-right">
-              <span>{isLoading ? "Refreshing" : "Current winner"}</span>
+              <span>{isLoading ? "Refreshing" : dataMode === "api" ? "API winner" : "Static winner"}</span>
               <strong>{betterModel}</strong>
             </div>
           </div>
