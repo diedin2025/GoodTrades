@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: morganhacks-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    envVars:
+      - key: HOST
+        value: 0.0.0.0

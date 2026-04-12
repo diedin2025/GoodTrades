@@ -36,3 +36,11 @@ React + Tailwind CSS prototype for a USDA-style AI evaluation dashboard.
 - Terminal 2: `npm run dev`
 - Vite proxies `/api/*` requests to `http://127.0.0.1:8787`
 - Optional: set `VITE_API_BASE_URL` if your backend runs on a different host
+
+## Deploy backend + frontend
+
+- The repo includes [render.yaml](/Users/ian/Documents/MorganHacks/render.yaml) so the backend can be deployed as a Render web service
+- Render requires the app to bind to `0.0.0.0` and use the provided `PORT` value, which this backend supports via environment variables
+- After Render gives you a public backend URL such as `https://morganhacks-api.onrender.com`, add a GitHub repository variable named `VITE_API_BASE_URL`
+- Set that variable to your backend URL, then rerun the GitHub Pages workflow so the static frontend is built against the live API
+- If `VITE_API_BASE_URL` is not set or the backend is down, the frontend falls back to static demo mode
