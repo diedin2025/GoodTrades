@@ -1,46 +1,83 @@
-# USDA AI Evals Engine
+# GoodTrades Full-Stack Paper Trading Platform
 
-React + Tailwind CSS prototype for a USDA-style AI evaluation dashboard.
+React + Vite frontend with a Node backend that now includes multi-agent orchestration, paper portfolio APIs, backtesting, persistent trade memory, coaching summaries, drawing analysis, and realtime streaming.
 
-## Included features
+## What it does
 
-- TEVVRL scoring for Test, Evaluation, Verification, Reliability, and Leniency
-- Validation score calculated as `(T + E + V + R + L) / 5`
-- User-controlled pass/fail threshold for model release decisions
-- Side-by-side prompt comparison for two LLMs
-- Continuous monitoring graphs that compare average versus current performance
-- Genre selector for Business, Science, Healthcare, Math, and Art
-- Scalable API and CI/CD pipeline framing for production rollout
-- Lightweight Node backend for health checks, model metadata, evaluation, comparison, and trend APIs
+- Tracks a live or demo stock watchlist
+- Polls the backend for updated quotes and trend history
+- Stores paper trading and memory data in backend persistence (`backend/data/store.json`)
+- Calculates portfolio positions, realized P&L, and unrealized P&L via API
+- Surfaces rules-based trade ideas for each tracked symbol
+- Optionally adds an AI watchlist brief when `GEMINI_API_KEY` is configured
+- Runs 10-agent orchestration on demand (`/api/agents/query`)
+- Runs strategy backtests over 30-session history (`/api/backtest/run`)
+- Scores chart drawing confluence (`/api/drawings/analyze`)
+- Streams live market/agent updates over SSE (`/api/stream/live`)
 
-## Notes
+## API mode
 
-- The React UI and backend share the same eval engine module so the scoring math stays consistent.
-- The backend is intentionally lightweight and local-first, giving you a concrete API without adding extra packages.
-- A production version would connect the API layer to queued eval jobs, model adapters, persistent metrics storage, and alerting services.
+The backend supports two modes:
 
-## Backend API
+- `demo`: works out of the box with seeded stock data
+- `live`: enabled when `ALPHA_VANTAGE_API_KEY` is set
 
-- `npm run api` starts the backend on `http://localhost:8787`
-- `npm run dev:api` starts the backend in watch mode
-- `GET /api/health` returns service health
-- `GET /api/genres` returns supported genres and default prompts
-- `GET /api/models` returns available model metadata
-- `GET /api/trends?genre=Business&modelId=gpt5` returns current score plus historical trend data
-- `POST /api/evaluate` evaluates one model for a prompt
-- `POST /api/compare` compares two models head-to-head
+The live integration uses Alpha Vantage endpoints for:
+
+- symbol search
+- global quotes
+- daily time series
+- company overview
+
+## Environment variables
+
+- `ALPHA_VANTAGE_API_KEY` enables genuine market data
+- `GEMINI_API_KEY` enables an optional AI note for the idea stream
+- `GEMINI_MODEL` overrides the default Gemini model
+- `PORT` overrides the backend port, default `8787`
+- `HOST` overrides the backend host, default `127.0.0.1`
 
 ## Local development
 
-- Terminal 1: `npm run dev:api`
-- Terminal 2: `npm run dev`
-- Vite proxies `/api/*` requests to `http://127.0.0.1:8787`
-- Optional: set `VITE_API_BASE_URL` if your backend runs on a different host
+1. Run `npm run dev:api`
+2. Run `npm run dev`
+3. Open the Vite app in your browser
 
-## Deploy backend + frontend
+The Vite dev server proxies `/api/*` to `http://127.0.0.1:8787`.
 
-- The repo includes [render.yaml](/Users/ian/Documents/MorganHacks/render.yaml) so the backend can be deployed as a Render web service
-- Render requires the app to bind to `0.0.0.0` and use the provided `PORT` value, which this backend supports via environment variables
-- After Render gives you a public backend URL such as `https://morganhacks-api.onrender.com`, add a GitHub repository variable named `VITE_API_BASE_URL`
-- Set that variable to your backend URL, then rerun the GitHub Pages workflow so the static frontend is built against the live API
-- If `VITE_API_BASE_URL` is not set or the backend is down, the frontend falls back to static demo mode
+## API endpoints
+
+- `GET /api/health`
+- `POST /api/onboarding/profile`
+- `GET /api/market/search?keywords=AAPL`
+- `GET /api/market/watchlist?symbols=AAPL,MSFT,NVDA`
+- `GET /api/market/symbol?symbol=TSLA`
+- `POST /api/market/ideas`
+- `POST /api/paper/orders`
+- `GET /api/paper/portfolio`
+- `POST /api/backtest/run`
+- `GET /api/memory/timeline`
+- `POST /api/agents/query`
+- `POST /api/drawings/analyze`
+- `GET /api/coach/summary?symbol=AAPL`
+- `GET /api/stream/live`
+
+OpenAPI reference: `backend/openapi.json`
+
+Example request:
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/market/ideas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "symbols": ["AAPL", "MSFT", "NVDA"],
+    "includeAiNote": true
+  }'
+```
+
+## Notes
+
+- Backend persistence is file-based for MVP speed and can be replaced with Postgres/Redis in production.
+- Use `X-User-Id` request header for multi-user isolation in API-driven flows.
+- The app is a simulator and idea dashboard, not a brokerage or order-routing system.
+- Alpha Vantage quote freshness depends on your plan. The app will still work, but truly real-time feeds may require a premium entitlement.

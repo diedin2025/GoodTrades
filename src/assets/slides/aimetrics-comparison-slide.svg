@@ -1,0 +1,52 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#080510"/>
+  <rect x="74" y="72" width="1452" height="756" rx="34" fill="#130A24" stroke="rgba(255,255,255,0.08)"/>
+
+  <text x="118" y="160" fill="#FFB0C2" font-family="Outfit, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="8">LIVE MODEL COMPARISON</text>
+  <text x="118" y="248" fill="#F6F1FF" font-family="Sora, Arial, sans-serif" font-size="74" font-weight="700">Gemini vs GPT-5</text>
+  <text x="118" y="308" fill="#B8ADD8" font-family="Outfit, Arial, sans-serif" font-size="30">Same prompt. Same scoring pipeline. Clear winner.</text>
+
+  <rect x="118" y="380" width="640" height="340" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+  <rect x="842" y="380" width="640" height="340" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+
+  <text x="160" y="448" fill="#22C55E" font-family="Sora, Arial, sans-serif" font-size="42" font-weight="700">Google Gemini</text>
+  <text x="880" y="448" fill="#8B5CF6" font-family="Sora, Arial, sans-serif" font-size="42" font-weight="700">GPT-5 Class</text>
+
+  <text x="160" y="500" fill="#F6F1FF" font-family="Outfit, Arial, sans-serif" font-size="30" font-weight="600">Composite Score: 8.3</text>
+  <text x="880" y="500" fill="#F6F1FF" font-family="Outfit, Arial, sans-serif" font-size="30" font-weight="600">Composite Score: 8.6</text>
+
+  <g font-family="Outfit, Arial, sans-serif" font-size="24" fill="#C8BDE4">
+    <text x="160" y="566">Test</text>
+    <text x="160" y="616">Evaluation</text>
+    <text x="160" y="666">Verification</text>
+    <text x="160" y="716">Reliability</text>
+
+    <text x="880" y="566">Test</text>
+    <text x="880" y="616">Evaluation</text>
+    <text x="880" y="666">Verification</text>
+    <text x="880" y="716">Reliability</text>
+  </g>
+
+  <g>
+    <rect x="292" y="542" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="292" y="542" width="301" height="18" rx="9" fill="#22C55E"/>
+    <rect x="292" y="592" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="292" y="592" width="294" height="18" rx="9" fill="#22C55E"/>
+    <rect x="292" y="642" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="292" y="642" width="308" height="18" rx="9" fill="#22C55E"/>
+    <rect x="292" y="692" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="292" y="692" width="287" height="18" rx="9" fill="#22C55E"/>
+
+    <rect x="1012" y="542" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="1012" y="542" width="322" height="18" rx="9" fill="#8B5CF6"/>
+    <rect x="1012" y="592" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="1012" y="592" width="315" height="18" rx="9" fill="#8B5CF6"/>
+    <rect x="1012" y="642" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="1012" y="642" width="329" height="18" rx="9" fill="#8B5CF6"/>
+    <rect x="1012" y="692" width="350" height="18" rx="9" fill="#27183E"/>
+    <rect x="1012" y="692" width="322" height="18" rx="9" fill="#8B5CF6"/>
+  </g>
+
+  <rect x="592" y="120" width="430" height="74" rx="37" fill="#2A173F" stroke="rgba(255,255,255,0.08)"/>
+  <text x="640" y="166" fill="#F6F1FF" font-family="Outfit, Arial, sans-serif" font-size="28" font-weight="700">Winner: GPT-5 by 0.3 points</text>
+</svg>

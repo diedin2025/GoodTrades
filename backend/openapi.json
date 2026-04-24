@@ -1,0 +1,23 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "GoodTrades API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/health": { "get": { "summary": "Health check", "responses": { "200": { "description": "OK" } } } },
+    "/api/onboarding/profile": { "post": { "summary": "Save onboarding profile", "responses": { "200": { "description": "Saved profile" } } } },
+    "/api/market/search": { "get": { "summary": "Search symbols", "responses": { "200": { "description": "Symbol list" } } } },
+    "/api/market/watchlist": { "get": { "summary": "Fetch watchlist quotes", "responses": { "200": { "description": "Quotes" } } } },
+    "/api/market/symbol": { "get": { "summary": "Fetch single symbol detail", "responses": { "200": { "description": "Symbol detail" } } } },
+    "/api/market/ideas": { "post": { "summary": "Generate ideas and optional AI note", "responses": { "200": { "description": "Idea list" } } } },
+    "/api/paper/orders": { "post": { "summary": "Place paper order", "responses": { "200": { "description": "Order accepted" } } } },
+    "/api/paper/portfolio": { "get": { "summary": "Get paper portfolio", "responses": { "200": { "description": "Portfolio" } } } },
+    "/api/backtest/run": { "post": { "summary": "Run strategy backtest", "responses": { "200": { "description": "Backtest result" } } } },
+    "/api/memory/timeline": { "get": { "summary": "Get memory timeline", "responses": { "200": { "description": "Memory events" } } } },
+    "/api/agents/query": { "post": { "summary": "Run 10-agent orchestrated query", "responses": { "200": { "description": "Agent run output" } } } },
+    "/api/drawings/analyze": { "post": { "summary": "Analyze chart drawings", "responses": { "200": { "description": "Drawing analysis" } } } },
+    "/api/coach/summary": { "get": { "summary": "Get adaptive coach summary", "responses": { "200": { "description": "Coach summary" } } } },
+    "/api/stream/live": { "get": { "summary": "Live SSE stream for market and agent updates", "responses": { "200": { "description": "SSE stream" } } } }
+  }
+}

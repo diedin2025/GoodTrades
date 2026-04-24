@@ -38,6 +38,21 @@ export const MODEL_OPTIONS = [
     },
   },
   {
+    id: "gemini",
+    name: "Google Gemini",
+    lane: "Multimodal enterprise model",
+    tagline: "Strong summarization, polished language, and reliable broad-domain assistance.",
+    standout: "Best for balanced multimodal-style productivity",
+    color: "#22c55e",
+    averages: {
+      Business: { test: 8.6, evaluation: 8.5, verification: 8.4, reliability: 8.4, leniency: 7.3 },
+      Science: { test: 8.7, evaluation: 8.5, verification: 8.5, reliability: 8.3, leniency: 7.1 },
+      Healthcare: { test: 8.2, evaluation: 8.1, verification: 8.3, reliability: 8.4, leniency: 6.9 },
+      Math: { test: 8.5, evaluation: 8.3, verification: 8.6, reliability: 8.1, leniency: 7.0 },
+      Art: { test: 8.9, evaluation: 8.8, verification: 8.2, reliability: 8.3, leniency: 8.1 },
+    },
+  },
+  {
     id: "usda-tuned",
     name: "USDA Guardrail Tune",
     lane: "Fine-tuned agency model",
@@ -150,6 +165,8 @@ export function buildResponse(model, genre, prompt, validation) {
   const posture =
     model.id === "usda-tuned"
       ? "cautious and compliance-forward"
+      : model.id === "gemini"
+        ? "clear, polished, and workflow-friendly"
       : model.id === "deepseek"
         ? "analytical and detail-heavy"
         : "balanced and production-ready";

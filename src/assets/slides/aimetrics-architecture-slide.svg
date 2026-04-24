@@ -1,0 +1,44 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#090511"/>
+  <text x="108" y="150" fill="#FFB0C2" font-family="Outfit, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="8">SYSTEM ARCHITECTURE</text>
+  <text x="108" y="234" fill="#F6F1FF" font-family="Sora, Arial, sans-serif" font-size="72" font-weight="700">How AIMetrics works</text>
+
+  <g font-family="Outfit, Arial, sans-serif">
+    <rect x="108" y="340" width="242" height="150" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+    <text x="160" y="408" fill="#F6F1FF" font-size="34" font-weight="700">Frontend</text>
+    <text x="160" y="452" fill="#B8ADD8" font-size="24">React dashboard</text>
+
+    <rect x="440" y="340" width="242" height="150" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+    <text x="476" y="408" fill="#F6F1FF" font-size="34" font-weight="700">API Layer</text>
+    <text x="476" y="452" fill="#B8ADD8" font-size="24">Node.js endpoints</text>
+
+    <rect x="772" y="340" width="242" height="150" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+    <text x="800" y="408" fill="#F6F1FF" font-size="34" font-weight="700">Eval Engine</text>
+    <text x="800" y="452" fill="#B8ADD8" font-size="24">TEVVRL scoring logic</text>
+
+    <rect x="1104" y="252" width="320" height="150" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+    <text x="1140" y="320" fill="#F6F1FF" font-size="34" font-weight="700">LLM Providers</text>
+    <text x="1140" y="364" fill="#B8ADD8" font-size="24">GPT, Gemini, DeepSeek</text>
+
+    <rect x="1104" y="446" width="320" height="150" rx="28" fill="#1A1030" stroke="rgba(255,255,255,0.08)"/>
+    <text x="1140" y="514" fill="#F6F1FF" font-size="34" font-weight="700">Trend Storage</text>
+    <text x="1140" y="558" fill="#B8ADD8" font-size="24">Historical benchmarks</text>
+  </g>
+
+  <g stroke-linecap="round" stroke-width="10">
+    <path d="M350 415H438" stroke="#8B5CF6"/>
+    <path d="M682 415H770" stroke="#D946EF"/>
+    <path d="M1014 365H1102" stroke="#FB7185"/>
+    <path d="M1014 522H1102" stroke="#22C55E"/>
+  </g>
+
+  <g fill="#F6F1FF">
+    <circle cx="394" cy="415" r="8"/>
+    <circle cx="726" cy="415" r="8"/>
+    <circle cx="1058" cy="365" r="8"/>
+    <circle cx="1058" cy="522" r="8"/>
+  </g>
+
+  <rect x="108" y="686" width="1316" height="114" rx="28" fill="#120A21" stroke="rgba(255,255,255,0.08)"/>
+  <text x="154" y="754" fill="#C8BDE4" font-family="Outfit, Arial, sans-serif" font-size="28">Prompt enters the dashboard, the backend scores each model with TEVVRL logic, then returns a winner, reasons, and trend data for monitoring.</text>
+</svg>
